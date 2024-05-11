@@ -1,0 +1,32 @@
+<nav class="bg-yellow-300 p-2">
+  <div class="flex justify-between">
+    <div class="flex justify-center self-center w-1/5">
+      <a href="/">LOGO</a>
+    </div>
+    <div class="w-3/5 bg-white flex self-center items-center shadow-md">
+      <input
+        class="border rounded-sm w-full h-10"
+        type="text"
+        placeholder="Buscador..."
+      />
+      <button class="border rounded-sm h-10"><i>search</i></button>
+    </div>
+    <div routerLink="show-cart" class="mr-5 mt-5">carrito</div>
+  </div>
+  <ul class="flex justify-center gap-32 pt-2">
+    <li><a href="/">Inicio</a></li>
+    <li class="relative" (click)="switch()">
+      Categories
+
+      <ul class="absolute">
+        @for (item of categories; track $index) {
+        <li [ngClass]="select === true ? 'visible' : 'invisible'">
+          {{ item }}
+        </li>
+        }
+      </ul>
+    </li>
+    <li><a href="/acerca-de">Acerca de</a></li>
+    <li><a href="/contacto">Contacto</a></li>
+  </ul>
+</nav>

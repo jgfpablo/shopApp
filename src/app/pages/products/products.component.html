@@ -1,0 +1,12 @@
+<div class="flex flex-wrap justify-between p-8">
+  @for (item of data; track $index) {
+  <app-card (dataEmit)="addToCart($event)" [item]="item"></app-card>
+  }
+</div>
+
+<!-- <div
+  name="toast"
+  class="sticky right-0 top-0 bg-green-300 border rounded-sm border-green-500 shadow-sm text-green-700 w-64 text-center"
+>
+  <p>Producto Agregado al carrito</p>
+</div> -->

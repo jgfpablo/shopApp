@@ -1,0 +1,36 @@
+@if(item){
+
+<div class="hover:shadow-xl">
+  <div class="w-72 card border rounded-sm shadow-lg mt-5">
+    <div class="cursor-pointer" [routerLink]="['/details/', item.id]">
+      <picture class="flex justify-center p-2">
+        <img
+          class="object-contain"
+          src="{{ item.image }}"
+          alt="Descripción de la imagen"
+          loading="lazy"
+        />
+      </picture>
+
+      <div class="p-3 w-72 h-56">
+        <p class="text-base hover:whitespace-normal">
+          {{ item.title }}
+        </p>
+        <p class="text-xl pt-1 font-bold text-green-600">${{ item.price }}</p>
+        <p class="pt-1">Rating: {{ item.rating.rate | rating }}</p>
+        <div class="relative w-28"></div>
+      </div>
+    </div>
+
+    <div class="text-center mb-5">
+      <button
+        (click)="addToCart()"
+        class="border rounded-md shadow-xl p-2 border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-300 m-auto w-4/5"
+      >
+        Agregar al carrito
+      </button>
+    </div>
+  </div>
+</div>
+
+}
