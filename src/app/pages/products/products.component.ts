@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, SimpleChanges } from '@angular/core';
 import { ShopService } from '../../services/shop.service';
-import { map, tap } from 'rxjs';
 import { Product } from '../../interfaces/products.interfaces';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -9,21 +9,56 @@ import { Product } from '../../interfaces/products.interfaces';
   styleUrl: './products.component.scss',
 })
 export class ProductsComponent {
-  constructor(private shopService: ShopService) {}
+  constructor(
+    private shopService: ShopService,
+    private ActivatedRoute: ActivatedRoute
+  ) {}
 
-  data: Product[] = [];
-
+  products: Product[] = [];
   cartStore: Product[] = [];
+  tipeData: string = '';
 
   ngOnInit(): void {
-    this.shopService.getAllProducts().subscribe((resp) => {
-      this.data = resp;
+    this.ActivatedRoute.params.subscribe((params) => {
+      this.tipeData = params['cat'];
+      this.getDataProducts();
     });
+  }
+
+  getDataProducts() {
+    if (!this.tipeData) {
+      this.shopService.getAllProducts().subscribe((resp) => {
+        this.products = resp;
+      });
+    } else {
+      this.shopService
+        .getProductsByCategories(this.tipeData)
+        .subscribe((resp) => {
+          this.products = resp;
+        });
+    }
   }
 
   addToCart(item: Product) {
     this.cartStore = JSON.parse(localStorage.getItem('cart')!) || [];
-    this.cartStore.push(item);
+
+    if (this.cartStore.length > 0) {
+      let found = false;
+      for (let index = 0; index < this.cartStore.length; index++) {
+        if (this.cartStore[index].id == item.id) {
+          this.cartStore[index].cuantity += 1;
+          found = true;
+        }
+      }
+      if (found == false) {
+        item.cuantity = 1;
+        this.cartStore.push(item);
+      }
+    } else {
+      item.cuantity = 1;
+      this.cartStore.push(item);
+    }
+
     localStorage.setItem('cart', JSON.stringify(this.cartStore));
   }
 }

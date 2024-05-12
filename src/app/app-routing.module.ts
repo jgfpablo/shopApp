@@ -11,11 +11,15 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'category/:cat',
+    component: ProductsComponent,
+  },
+  {
     path: 'details/:id',
     component: ViewDetailsProductComponent,
   },
   {
-    path: 'show-cart',
+    path: 'shoppingCart',
     component: ViewCartComponent,
   },
 ];

@@ -16,7 +16,6 @@ export class MenuBarComponent {
     this.shopServices.getAllCategories().subscribe((categories) => {
       this.categories = categories;
     });
-    console.log(this.categories);
   }
 
   switch() {

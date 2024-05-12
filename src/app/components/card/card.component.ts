@@ -8,9 +8,9 @@ import { Product } from '../../interfaces/products.interfaces';
 })
 export class CardComponent {
   @Input() item: Product | undefined;
-  @Output() dataEmit = new EventEmitter();
+  @Output() addToCartEmit = new EventEmitter();
 
   addToCart() {
-    this.dataEmit.emit(this.item);
+    this.addToCartEmit.emit(this.item);
   }
 }

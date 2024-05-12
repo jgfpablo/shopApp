@@ -11,7 +11,7 @@
       />
       <button class="border rounded-sm h-10"><i>search</i></button>
     </div>
-    <div routerLink="show-cart" class="mr-5 mt-5">carrito</div>
+    <div routerLink="shoppingCart" class="mr-5 mt-5">carrito</div>
   </div>
   <ul class="flex justify-center gap-32 pt-2">
     <li><a href="/">Inicio</a></li>
@@ -19,8 +19,17 @@
       Categories
 
       <ul class="absolute">
+        <li
+          [ngClass]="select === true ? 'visible' : 'invisible'"
+          [routerLink]="['']"
+        >
+          All Products
+        </li>
         @for (item of categories; track $index) {
-        <li [ngClass]="select === true ? 'visible' : 'invisible'">
+        <li
+          [ngClass]="select === true ? 'visible' : 'invisible'"
+          [routerLink]="['/category/', item]"
+        >
           {{ item }}
         </li>
         }

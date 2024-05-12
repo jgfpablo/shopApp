@@ -12,4 +12,8 @@ export class ViewCartComponent {
     this.cart = JSON.parse(localStorage.getItem('cart') ?? '[]');
     console.log(this.cart);
   }
+
+  ngOnChanges(): void {
+    console.log('hola');
+  }
 }
