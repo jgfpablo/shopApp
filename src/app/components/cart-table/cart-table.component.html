@@ -78,14 +78,14 @@
               <td
                 class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
               >
-                <button (click)="cuantity('-')">-</button>
+                <button (click)="addSubstractProduct('-', item.id)">-</button>
                 {{ item.cuantity }}
-                <button (click)="cuantity('+')">+</button>
+                <button (click)="addSubstractProduct('+', item.id)">+</button>
               </td>
               <td
                 class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
               >
-                Total price
+                Total price : ${{ item.cuantity * item.price }}
               </td>
 
               <td

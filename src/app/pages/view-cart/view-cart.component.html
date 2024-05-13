@@ -1,6 +1,7 @@
 <div>
   <app-cart-table
     (emitDeleteProduct)="deleteProductToCart($event)"
+    (emitAddSubstractProduct)="addSubstractProduct($event)"
     [cart]="cart"
   ></app-cart-table>
 </div>

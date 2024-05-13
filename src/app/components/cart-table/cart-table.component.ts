@@ -9,13 +9,16 @@ import { Product } from '../../interfaces/products.interfaces';
 export class CartTableComponent {
   @Input() cart: Product[] = [];
   @Output() emitDeleteProduct = new EventEmitter();
+  @Output() emitAddSubstractProduct = new EventEmitter();
 
   deleteProduct(id: number) {
     this.emitDeleteProduct.emit(id);
   }
 
-  cuantity(data: string) {
-    console.log('debo ' + data);
+  addSubstractProduct(operator: string, id: number) {
+    let data = [operator, id];
+
+    this.emitAddSubstractProduct.emit(data);
 
     //deberia emitir el dato para que view cart lo cosas
   }
