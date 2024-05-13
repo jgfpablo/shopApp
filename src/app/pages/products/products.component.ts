@@ -46,16 +46,16 @@ export class ProductsComponent {
       let found = false;
       for (let index = 0; index < this.cartStore.length; index++) {
         if (this.cartStore[index].id == item.id) {
-          this.cartStore[index].cuantity += 1;
+          this.cartStore[index].amount += 1;
           found = true;
         }
       }
       if (found == false) {
-        item.cuantity = 1;
+        item.amount = 1;
         this.cartStore.push(item);
       }
     } else {
-      item.cuantity = 1;
+      item.amount = 1;
       this.cartStore.push(item);
     }
 

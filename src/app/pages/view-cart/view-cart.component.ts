@@ -24,15 +24,15 @@ export class ViewCartComponent {
     if (operator[0] == '+') {
       for (let index = 0; index < this.cart.length; index++) {
         if (this.cart[index].id === operator[1]) {
-          this.cart[index].cuantity++;
+          this.cart[index].amount++;
           localStorage.setItem('cart', JSON.stringify(this.cart));
         }
       }
     } else {
       for (let index = 0; index < this.cart.length; index++) {
         if (this.cart[index].id === operator[1]) {
-          if (this.cart[index].cuantity > 0) {
-            this.cart[index].cuantity--;
+          if (this.cart[index].amount > 0) {
+            this.cart[index].amount--;
             localStorage.setItem('cart', JSON.stringify(this.cart));
           }
         }
