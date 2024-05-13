@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../interfaces/products.interfaces';
 
 @Component({
@@ -8,11 +8,10 @@ import { Product } from '../../interfaces/products.interfaces';
 })
 export class CartTableComponent {
   @Input() cart: Product[] = [];
+  @Output() emitDeleteProduct = new EventEmitter();
 
   deleteProduct(id: number) {
-    this.cart.splice(id, 1);
-    //deberia emitir el dato para que view cart lo cosas
-    console.log(this.cart);
+    this.emitDeleteProduct.emit(id);
   }
 
   cuantity(data: string) {

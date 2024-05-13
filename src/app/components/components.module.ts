@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from './card/card.component';
-import { ProductDetailsComponent } from './product-details/product-details.component';
 import { RouterLink } from '@angular/router';
 import { RatingPipe } from './pipe/rating.pipe';
 import { CartTableComponent } from './cart-table/cart-table.component';
+import { DetailsProductComponent } from './details-product/details-product.component';
 
 @NgModule({
   declarations: [
     CardComponent,
-    ProductDetailsComponent,
     RatingPipe,
     CartTableComponent,
+    DetailsProductComponent,
   ],
   imports: [CommonModule, RouterLink],
-  exports: [CardComponent, CartTableComponent],
+  exports: [CardComponent, CartTableComponent, DetailsProductComponent],
 })
 export class ComponentsModule {}

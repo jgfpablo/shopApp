@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/products.interfaces';
 import { ShopService } from '../../services/shop.service';
-import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-view-details-product',

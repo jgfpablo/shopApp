@@ -1,5 +1,6 @@
 <div>
-  <p>view-cart works!</p>
-
-  <app-cart-table [cart]="cart"></app-cart-table>
+  <app-cart-table
+    (emitDeleteProduct)="deleteProductToCart($event)"
+    [cart]="cart"
+  ></app-cart-table>
 </div>

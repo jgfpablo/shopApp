@@ -16,4 +16,9 @@ export class ViewCartComponent {
   ngOnChanges(): void {
     console.log('hola');
   }
+
+  deleteProductToCart(id: number) {
+    this.cart.splice(id, 1);
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
 }
