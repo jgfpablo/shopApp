@@ -9,10 +9,7 @@ import { Product } from '../interfaces/products.interfaces';
 export class ShopService {
   constructor(private httpClient: HttpClient) {}
 
-  // https://fakestoreapi.com/products?limit=5
-  private apiUrl: string = 'https://fakestoreapi.com/products';
-  limit = 5;
-
+  private _Products: Product[] = [];
   getAllProducts(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(`https://fakestoreapi.com/products`);
   }

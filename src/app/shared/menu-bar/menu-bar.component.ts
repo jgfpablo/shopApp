@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Output, ViewChild } from '@angular/core';
 import { ShopService } from '../../services/shop.service';
+import { Product } from '../../interfaces/products.interfaces';
 
 @Component({
   selector: 'app-menu-bar',
@@ -9,6 +10,8 @@ import { ShopService } from '../../services/shop.service';
 export class MenuBarComponent {
   categories: string[] = [];
   select = false;
+  allProducts: Product[] = [];
+  @ViewChild('search') search!: ElementRef<HTMLInputElement>;
 
   constructor(private shopServices: ShopService) {}
 
@@ -20,5 +23,12 @@ export class MenuBarComponent {
 
   switch() {
     this.select = !this.select;
+  }
+
+  searchData() {
+    console.log(this.search.nativeElement.value);
+    this.shopServices.getAllProducts().subscribe((product) => {
+      this.allProducts = product;
+    });
   }
 }

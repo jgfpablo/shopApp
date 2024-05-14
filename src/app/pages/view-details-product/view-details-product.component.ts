@@ -26,4 +26,8 @@ export class ViewDetailsProductComponent {
       this.product = data;
     });
   }
+
+  addProduct(product: Product) {
+    console.log(product);
+  }
 }

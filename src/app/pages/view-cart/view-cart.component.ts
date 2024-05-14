@@ -10,7 +10,6 @@ export class ViewCartComponent {
   cart: Product[] = [];
   ngOnInit(): void {
     this.cart = JSON.parse(localStorage.getItem('cart') ?? '[]');
-    console.log(this.cart);
   }
 
   ngOnChanges(): void {}
@@ -31,7 +30,7 @@ export class ViewCartComponent {
     } else {
       for (let index = 0; index < this.cart.length; index++) {
         if (this.cart[index].id === operator[1]) {
-          if (this.cart[index].amount > 0) {
+          if (this.cart[index].amount > 1) {
             this.cart[index].amount--;
             localStorage.setItem('cart', JSON.stringify(this.cart));
           }

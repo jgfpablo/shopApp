@@ -1,3 +1,6 @@
 <div>
-  <app-details-product [product]="product"></app-details-product>
+  <app-details-product
+    (emitAddProduct)="addProduct($event)"
+    [product]="product"
+  ></app-details-product>
 </div>
