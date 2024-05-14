@@ -3,17 +3,20 @@
     <div class="flex justify-center self-center w-1/5">
       <a href="/">LOGO</a>
     </div>
-    <div class="w-3/5 bg-white flex self-center items-center shadow-md">
+    <form
+      (ngSubmit)="searchData()"
+      class="w-3/5 bg-white flex self-center items-center shadow-md"
+    >
       <input
         #search
         class="border rounded-sm w-full h-10"
         type="text"
         placeholder="Buscador..."
       />
-      <button class="border rounded-sm h-10" (click)="searchData()">
+      <button class="border rounded-sm h-10" type="submit">
         <i>search</i>
       </button>
-    </div>
+    </form>
     <div routerLink="shoppingCart" class="mr-5 mt-5">carrito</div>
   </div>
   <ul class="flex justify-center gap-32 pt-2">
