@@ -34,6 +34,10 @@ export class ProductsComponent {
         this.getDataProducts();
       }
     });
+
+    this.cartStore = JSON.parse(localStorage.getItem('cart')!);
+
+    this.searchService.setCartCount(this.cartStore.length);
   }
 
   getDataProducts() {
@@ -85,5 +89,6 @@ export class ProductsComponent {
     }
 
     localStorage.setItem('cart', JSON.stringify(this.cartStore));
+    this.searchService.setCartCount(this.cartStore.length);
   }
 }

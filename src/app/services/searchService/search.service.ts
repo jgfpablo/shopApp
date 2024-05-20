@@ -6,6 +6,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class SearchService {
   private searchSubject = new Subject();
+  private cartSubjet = new Subject();
 
   setSearch(search: string) {
     this.searchSubject.next(search);
@@ -15,5 +16,12 @@ export class SearchService {
     return this.searchSubject.asObservable() as Observable<string>;
   }
 
+  setCartCount(cartLength: number) {
+    this.cartSubjet.next(cartLength);
+  }
+
+  getCartCount(): Observable<number> {
+    return this.cartSubjet.asObservable() as Observable<number>;
+  }
   constructor() {}
 }

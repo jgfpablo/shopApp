@@ -14,6 +14,7 @@ export class MenuBarComponent {
   select = false;
   suggestion = false;
   allProducts: Product[] = [];
+  cartCount: number = 0;
   @ViewChild('search') search!: ElementRef<HTMLInputElement>;
 
   eventHelp = new Subject<any>();
@@ -31,6 +32,11 @@ export class MenuBarComponent {
   ngOnInit(): void {
     this.shopServices.getAllCategories().subscribe((categories) => {
       this.categories = categories;
+    });
+
+    this.searchService.getCartCount().subscribe((numb) => {
+      this.cartCount = numb;
+      console.log(this.cartCount);
     });
   }
 
