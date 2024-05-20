@@ -5,14 +5,32 @@
     </div>
     <form
       (ngSubmit)="searchData()"
-      class="w-3/5 bg-white flex self-center items-center shadow-md"
+      class="w-3/5 bg-white flex relative self-center items-center shadow-md"
     >
       <input
         #search
         class="border rounded-sm w-full h-10"
         type="text"
         placeholder="Buscador..."
+        (keydown)="suggestions()"
       />
+      @for (item of allProducts; track $index) {
+      <div
+        [ngClass]="suggestion === true ? 'visible' : 'invisible'"
+        class="absolute top-10 min-h-24 justify-between left-0 bg-slate-100 z-10 w-full"
+      >
+        <ul class="flex flex-col h-full">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li class="hover:bg-slate-400">{{ item.title }}</li>
+        </ul>
+      </div>
+      }
+
+      <!-- <span [ngClass]="suggestion === true ? 'visible' : 'invisible'">{{
+            item.title
+          }}</span> -->
       <button class="border rounded-sm h-10" type="submit">
         <i>search</i>
       </button>

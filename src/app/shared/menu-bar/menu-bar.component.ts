@@ -1,7 +1,8 @@
-import { Component, ElementRef, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ShopService } from '../../services/shop.service';
 import { Product } from '../../interfaces/products.interfaces';
-import { filter, map, tap } from 'rxjs';
+import { debounceTime, map, Subject } from 'rxjs';
+import { SearchService } from '../../services/searchService/search.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -11,10 +12,21 @@ import { filter, map, tap } from 'rxjs';
 export class MenuBarComponent {
   categories: string[] = [];
   select = false;
+  suggestion = false;
   allProducts: Product[] = [];
   @ViewChild('search') search!: ElementRef<HTMLInputElement>;
 
-  constructor(private shopServices: ShopService) {}
+  eventHelp = new Subject<any>();
+
+  constructor(
+    private shopServices: ShopService,
+    private searchService: SearchService
+  ) {
+    this.eventHelp.pipe(debounceTime(500)).subscribe(() => {
+      // this.searchData();
+      //esto es parte de las sugerencias
+    });
+  }
 
   ngOnInit(): void {
     this.shopServices.getAllCategories().subscribe((categories) => {
@@ -39,8 +51,11 @@ export class MenuBarComponent {
       )
       .subscribe((product) => {
         this.allProducts = product;
-        console.log(this.allProducts);
+        this.searchService.setSearch(this.search.nativeElement.value);
       });
-    // console.log(this.search.nativeElement.value);
+  }
+
+  suggestions() {
+    this.eventHelp.next(null);
   }
 }

@@ -1,7 +1,9 @@
-import { Component, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { ShopService } from '../../services/shop.service';
 import { Product } from '../../interfaces/products.interfaces';
 import { ActivatedRoute } from '@angular/router';
+import { SearchService } from '../../services/searchService/search.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -11,7 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductsComponent {
   constructor(
     private shopService: ShopService,
-    private ActivatedRoute: ActivatedRoute
+    private ActivatedRoute: ActivatedRoute,
+    private searchService: SearchService
   ) {}
 
   products: Product[] = [];
@@ -22,6 +25,14 @@ export class ProductsComponent {
     this.ActivatedRoute.params.subscribe((params) => {
       this.tipeData = params['cat'];
       this.getDataProducts();
+    });
+
+    this.searchService.getSearch().subscribe((resp) => {
+      if (resp) {
+        this.searchData(resp.replace(/\b\w/g, (c) => c.toUpperCase()));
+      } else {
+        this.getDataProducts();
+      }
     });
   }
 
@@ -37,6 +48,20 @@ export class ProductsComponent {
           this.products = resp;
         });
     }
+  }
+
+  searchData(search: string) {
+    this.shopService
+      .getAllProducts()
+      .pipe(
+        map((prod: Product[]) => {
+          const filter = prod.filter((prod) => prod.title.includes(search));
+          return filter.slice(0, 3);
+        })
+      )
+      .subscribe((product) => {
+        this.products = product;
+      });
   }
 
   addToCart(item: Product) {
