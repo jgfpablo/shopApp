@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ShopService } from '../../services/shop.service';
 import { Product } from '../../interfaces/products.interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { SearchService } from '../../services/searchService/search.service';
 import { map } from 'rxjs';
+import { apiServices } from '../../services/api/api.service';
+import { AlertsAndSugestionsService } from '../../services/alertsAndSuggestions/alerts-and-sugestions.service';
 
 @Component({
   selector: 'app-products',
@@ -12,9 +12,9 @@ import { map } from 'rxjs';
 })
 export class ProductsComponent {
   constructor(
-    private shopService: ShopService,
+    private apiService: apiServices,
     private ActivatedRoute: ActivatedRoute,
-    private searchService: SearchService
+    private alertsAndSuggestion: AlertsAndSugestionsService
   ) {}
 
   products: Product[] = [];
@@ -22,12 +22,24 @@ export class ProductsComponent {
   tipeData: string = '';
 
   ngOnInit(): void {
-    this.ActivatedRoute.params.subscribe((params) => {
-      this.tipeData = params['cat'];
-      this.getDataProducts();
-    });
+    let data = '';
+    this.alertsAndSuggestion
+      .getSearch()
+      .subscribe((dataSearch) => (data = dataSearch));
 
-    this.searchService.getSearch().subscribe((resp) => {
+    // cosas Cosas Cosas
+    if (data) {
+      this.searchData(data);
+      console.log(data, 'entre al if debo tener data guardada');
+    } else {
+      console.log('no entre al if no tengo data');
+      this.ActivatedRoute.params.subscribe((params) => {
+        this.tipeData = params['cat'];
+        this.getDataProducts();
+      });
+    }
+
+    this.alertsAndSuggestion.getSearch().subscribe((resp) => {
       if (resp) {
         this.searchData(resp.replace(/\b\w/g, (c) => c.toUpperCase()));
       } else {
@@ -37,16 +49,16 @@ export class ProductsComponent {
 
     this.cartStore = JSON.parse(localStorage.getItem('cart')!);
 
-    this.searchService.setCartCount(this.cartStore.length);
+    this.alertsAndSuggestion.setCartQuantity(this.cartStore.length);
   }
 
   getDataProducts() {
     if (!this.tipeData) {
-      this.shopService.getAllProducts().subscribe((resp) => {
+      this.apiService.getAllProducts().subscribe((resp) => {
         this.products = resp;
       });
     } else {
-      this.shopService
+      this.apiService
         .getProductsByCategories(this.tipeData)
         .subscribe((resp) => {
           this.products = resp;
@@ -55,7 +67,7 @@ export class ProductsComponent {
   }
 
   searchData(search: string) {
-    this.shopService
+    this.apiService
       .getAllProducts()
       .pipe(
         map((prod: Product[]) => {
@@ -89,6 +101,6 @@ export class ProductsComponent {
     }
 
     localStorage.setItem('cart', JSON.stringify(this.cartStore));
-    this.searchService.setCartCount(this.cartStore.length);
+    this.alertsAndSuggestion.setCartQuantity(this.cartStore.length);
   }
 }

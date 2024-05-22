@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ShopService } from '../../services/shop.service';
 import { Product } from '../../interfaces/products.interfaces';
 import { debounceTime, map, Subject } from 'rxjs';
-import { SearchService } from '../../services/searchService/search.service';
+import { apiServices } from '../../services/api/api.service';
+import { AlertsAndSugestionsService } from '../../services/alertsAndSuggestions/alerts-and-sugestions.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-bar',
@@ -10,42 +11,41 @@ import { SearchService } from '../../services/searchService/search.service';
   styleUrl: './menu-bar.component.scss',
 })
 export class MenuBarComponent {
-  categories: string[] = [];
-  select = false;
-  suggestion = false;
-  allProducts: Product[] = [];
-  cartCount: number = 0;
-  @ViewChild('search') search!: ElementRef<HTMLInputElement>;
+  categories: string[] = []; //contiene la lista de categorias para mostrarlas en menu
+  categorySelect = false; // si esta true las categorias son visibles
+  suggestion = false; // si esta true las sugerencias son visibles
+  suggestionProducts: Product[] = []; // contiene todos los productos sugeridos (3)
+  cartQuantity: number = 0; // muestra el numero de productos en carrito
+  @ViewChild('search') search!: ElementRef<HTMLInputElement>; //referencia a input de busqueda
 
-  eventHelp = new Subject<any>();
+  suggestionEvent = new Subject<any>(); //disparador de sugerencias
 
   constructor(
-    private shopServices: ShopService,
-    private searchService: SearchService
+    private apiServices: apiServices,
+    private alertsAndSuggestionServices: AlertsAndSugestionsService,
+    private router: Router
   ) {
-    this.eventHelp.pipe(debounceTime(500)).subscribe(() => {
-      // this.searchData();
-      //esto es parte de las sugerencias
+    this.suggestionEvent.pipe(debounceTime(300)).subscribe(() => {
+      this.searchSuggestion();
     });
   }
 
   ngOnInit(): void {
-    this.shopServices.getAllCategories().subscribe((categories) => {
+    this.apiServices.getAllCategories().subscribe((categories) => {
       this.categories = categories;
     });
 
-    this.searchService.getCartCount().subscribe((numb) => {
-      this.cartCount = numb;
-      console.log(this.cartCount);
+    this.alertsAndSuggestionServices.getCartQuantity().subscribe((cuantity) => {
+      this.cartQuantity = cuantity;
     });
   }
 
   switch() {
-    this.select = !this.select;
+    this.categorySelect = !this.categorySelect;
   }
 
-  searchData() {
-    this.shopServices
+  searchSuggestion() {
+    this.apiServices
       .getAllProducts()
       .pipe(
         map((prod: Product[]) => {
@@ -55,13 +55,20 @@ export class MenuBarComponent {
           return filter.slice(0, 3);
         })
       )
-      .subscribe((product) => {
-        this.allProducts = product;
-        this.searchService.setSearch(this.search.nativeElement.value);
+      .subscribe((products) => {
+        this.suggestionProducts = products;
+        this.search.nativeElement.value == ''
+          ? (this.suggestion = false)
+          : (this.suggestion = true);
       });
   }
 
+  searchData() {
+    this.alertsAndSuggestionServices.setSearch(this.search.nativeElement.value);
+    this.router.navigate(['']);
+  }
+
   suggestions() {
-    this.eventHelp.next(null);
+    this.suggestionEvent.next(null);
   }
 }

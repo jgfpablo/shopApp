@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../interfaces/products.interfaces';
 import { ShopService } from '../../services/shop.service';
+import { apiServices } from '../../services/api/api.service';
 
 @Component({
   selector: 'app-view-details-product',
@@ -10,6 +11,7 @@ import { ShopService } from '../../services/shop.service';
 })
 export class ViewDetailsProductComponent {
   constructor(
+    private apiService: apiServices,
     private ActivatedRoute: ActivatedRoute,
     private shopServices: ShopService
   ) {}
@@ -22,7 +24,7 @@ export class ViewDetailsProductComponent {
       this.id = params['id'];
     });
 
-    this.shopServices.getProductById(this.id!).subscribe((data) => {
+    this.apiService.getProductById(this.id!).subscribe((data) => {
       this.product = data;
     });
   }
