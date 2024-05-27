@@ -11,6 +11,11 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: ':product',
+    component: ProductsComponent,
+    // pathMatch: 'full',
+  },
+  {
     path: 'category/:cat',
     component: ProductsComponent,
   },

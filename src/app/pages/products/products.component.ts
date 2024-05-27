@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Product } from '../../interfaces/products.interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
 import { apiServices } from '../../services/api/api.service';
 import { AlertsAndSugestionsService } from '../../services/alertsAndSuggestions/alerts-and-sugestions.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -20,31 +20,13 @@ export class ProductsComponent {
   products: Product[] = [];
   cartStore: Product[] = [];
   tipeData: string = '';
+  searchedProduct: string = '';
 
   ngOnInit(): void {
-    let data = '';
-    this.alertsAndSuggestion
-      .getSearch()
-      .subscribe((dataSearch) => (data = dataSearch));
-
-    // cosas Cosas Cosas
-    if (data) {
-      this.searchData(data);
-      console.log(data, 'entre al if debo tener data guardada');
-    } else {
-      console.log('no entre al if no tengo data');
-      this.ActivatedRoute.params.subscribe((params) => {
-        this.tipeData = params['cat'];
-        this.getDataProducts();
-      });
-    }
-
-    this.alertsAndSuggestion.getSearch().subscribe((resp) => {
-      if (resp) {
-        this.searchData(resp.replace(/\b\w/g, (c) => c.toUpperCase()));
-      } else {
-        this.getDataProducts();
-      }
+    this.ActivatedRoute.params.subscribe((params) => {
+      this.tipeData = params['cat'];
+      this.searchedProduct = params['product'];
+      this.getDataProducts();
     });
 
     this.cartStore = JSON.parse(localStorage.getItem('cart')!);
@@ -53,32 +35,53 @@ export class ProductsComponent {
   }
 
   getDataProducts() {
-    if (!this.tipeData) {
-      this.apiService.getAllProducts().subscribe((resp) => {
-        this.products = resp;
-      });
-    } else {
+    if (!this.tipeData && !this.searchedProduct) {
+      this.getAllProducts();
+    } else if (this.searchedProduct) {
       this.apiService
-        .getProductsByCategories(this.tipeData)
-        .subscribe((resp) => {
-          this.products = resp;
+        .getAllProducts()
+        .pipe(
+          map((prod: Product[]) => {
+            const filter = prod.filter((prod) =>
+              prod.title.includes(this.searchedProduct)
+            );
+            return filter;
+          })
+        )
+        .subscribe((product) => {
+          this.products = product;
+          console.log(product);
         });
+    } else {
+      this.getProductByCategory();
     }
   }
 
-  searchData(search: string) {
-    this.apiService
-      .getAllProducts()
-      .pipe(
-        map((prod: Product[]) => {
-          const filter = prod.filter((prod) => prod.title.includes(search));
-          return filter.slice(0, 3);
-        })
-      )
-      .subscribe((product) => {
-        this.products = product;
-      });
+  getAllProducts() {
+    this.apiService.getAllProducts().subscribe((resp) => {
+      this.products = resp;
+    });
   }
+
+  getProductByCategory() {
+    this.apiService.getProductsByCategories(this.tipeData).subscribe((resp) => {
+      this.products = resp;
+    });
+  }
+
+  // searchSuggestions(search: string) {
+  //   this.apiService
+  //     .getAllProducts()
+  //     .pipe(
+  //       map((prod: Product[]) => {
+  //         const filter = prod.filter((prod) => prod.title.includes(search));
+  //         return filter.slice(0, 3);
+  //       })
+  //     )
+  //     .subscribe((product) => {
+  //       this.products = product;
+  //     });
+  // }
 
   addToCart(item: Product) {
     this.cartStore = JSON.parse(localStorage.getItem('cart')!) || [];
